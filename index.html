@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalmaMente - Regulación Emocional</title>
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --primary-light: #A29BFE;
+            --secondary: #00CEC9;
+            --accent: #FF7675;
+            --yellow: #FFEAA7;
+            --bg: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text: #2D3436;
+            --danger: #D63031;
+            --border-radius: 18px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 { margin: 0; font-size: 2.2rem; font-weight: 800; }
+        header p { margin-top: 5px; font-size: 1.1rem; opacity: 0.9; }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 20px 0 40px 0;
+        }
+
+        /* BANNER DE ADVERTENCIA */
+        .disclaimer-card {
+            background-color: #FFF3CD;
+            border: 2px solid #FFEBAA;
+            border-left: 8px solid #FFC107;
+            border-radius: var(--border-radius);
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #856404;
+        }
+
+        /* LÍNEAS DE AYUDA ECUADOR */
+        .ec-helplines {
+            background: #E1F5FE;
+            border: 2px solid #B3E5FC;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .ec-helplines h3 { color: #0277BD; margin-top: 0; display: flex; align-items: center; gap: 8px; }
+        .helpline-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        .btn-helpline {
+            flex: 1 1 200px;
+            background-color: white;
+            color: #0277BD;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            text-align: center;
+            border: 2px solid #81D4FA;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .btn-helpline:hover { background-color: #0277BD; color: white; }
+        .btn-helpline.emergency { border-color: var(--danger); color: var(--danger); }
+        .btn-helpline.emergency:hover { background-color: var(--danger); color: white; }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+        }
+
+        h2 { color: var(--primary); margin-top: 0; }
+
+        /* CARICATURAS E EMOCIONES INTERACTIVAS */
+        .emotions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .emotion-card {
+            background-color: #F0F3FF;
+            border: 3px solid transparent;
+            border-radius: 16px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .emotion-card:hover {
+            transform: translateY(-5px);
+            background-color: #E0E7FF;
+        }
+
+        .emotion-card.active {
+            border-color: var(--primary);
+            background-color: #E8E5FF;
+            transform: scale(1.05);
+        }
+
+        .cartoon-avatar {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 10px;
+            transition: transform 0.3s;
+        }
+
+        .emotion-card:hover .cartoon-avatar {
+            transform: scale(1.1) rotate(3deg);
+        }
+
+        .emotion-label {
+            font-weight: bold;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        /* TÉCNICAS */
+        .technique-box {
+            display: none;
+            animation: bounceIn 0.5s ease-in-out;
+        }
+
+        .technique-box.active { display: block; }
+
+        .tech-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #F4F0FF;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .interactive-illustration {
+            width: 100px;
+            height: 100px;
+            flex-shrink: 0;
+            cursor: pointer;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+            transition: transform 0.2s;
+        }
+
+        .interactive-illustration:active {
+            transform: scale(0.9);
+        }
+
+        .steps-list {
+            padding-left: 20px;
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        .steps-list li { margin-bottom: 8px; }
+
+        /* REGISTRO SIMPLE */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        select, button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid #E0E0E0;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        button.btn-save {
+            background-color: var(--secondary);
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        button.btn-save:hover { background-color: #00B5B2; }
+
+        .history-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        .history-item {
+            background: #F9F9F9;
+            border-left: 5px solid var(--primary);
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            50% { transform: scale(1.02); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>CalmaMente 🧸</h1>
+        <p>Tu espacio seguro de autorregulación emocional</p>
+    </header>
+
+    <div class="container">
+
+        <!-- RECORDATORIO PROFESIONAL -->
+        <div class="disclaimer-card">
+            <strong>⚠️ Recordatorio Importante de Salud Mental:</strong><br>
+            Esta aplicación es una herramienta psicoeducativa de autoayuda y <strong>NO reemplaza el diagnóstico ni la atención médica o psicológica profesional</strong>. Si sientes desbordamiento frecuente o pensamientos que atentan contra tu integridad, acude a un profesional.
+        </div>
+
+        <!-- LÍNEAS DE APOYO EN ECUADOR -->
+        <div class="ec-helplines">
+            <h3>🇪🇨 Contactos de Emergencia y Salud Mental en Ecuador</h3>
+            <p style="margin:0 0 10px 0; font-size: 0.9rem;">Si necesitas hablar con alguien o estás en situación de crisis, comunícate de forma gratuita:</p>
+            <div class="helpline-buttons">
+                <a href="tel:171" class="btn-helpline">📞 MSP Línea 171 (Opción 6)</a>
+                <a href="tel:+593997196911" class="btn-helpline">💚 Ánima EC (+593 99 719 6911)</a>
+                <a href="tel:911" class="btn-helpline emergency">🚨 ECU 911 (Riesgo Inmediato)</a>
+            </div>
+        </div>
+
+        <!-- PASO 1: SELECCIÓN CON CARICATURAS -->
+        <div class="card">
+            <h2>1. ¿Qué emoción te desborda en este momento?</h2>
+            <p>Toca al personaje que mejor represente cómo te sientes:</p>
+            
+            <div class="emotions-grid">
+                <!-- CARICATURA ANSIEDAD -->
+                <div class="emotion-card" onclick="selectEmotion('ansiedad', this)">
+                    <svg class="cartoon-avatar" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="#FFEAA7"/>
+                        <!-- Ojos Espirales -->
+                        <path d="M 30,40 A 5,5 0 1,1 35,45 A 5,5 0 1,1 25,40" stroke="#2D3436" stroke-width="3" fill="none"/>
+                        <path d="M 65,40 A 5,5 0 1,1 70,45 A 5,5 0 1,1 60,40" stroke="#2D3436" stroke-width="3" fill="none"/>
+                        <!-- Boca Temblorosa -->
+                        <path d="M 35 70 Q 42 65 50 70 T 65 70" stroke="#2D3436" stroke-width="4" fill="none"/>
+                        <!-- Gotas de Sudor -->
+                        <path d="M 80 30 Q 85 35 80 40 Q 75 35 80 30" fill="#74B9FF"/>
+                    </svg>
+                    <div class="emotion-label">Ansiedad / Pánico</div>
+                </div>
+
+                <!-- CARICATURA IRA -->
+                <div class="emotion-card" onclick="selectEmotion('ira', this)">
+                    <svg class="cartoon-avatar" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="#FF7675"/>
+                        <!-- Cejas Enojadas -->
+                        <path d="M 25 30 L 45 40 M 75 30 L 55 40" stroke="#2D3436" stroke-width="5" stroke-linecap="round"/>
+                        <!-- Ojos Molestos -->
+                        <circle cx="35" cy="48" r="5" fill="#2D3436"/>
+                        <circle cx="65" cy="48" r="5" fill="#2D3436"/>
+                        <!-- Boca Enojada -->
+                        <path d="M 30 70 Q 50 55 70 70" stroke="#2D3436" stroke-width="5" fill="none" stroke-linecap="round"/>
+                    </svg>
+                    <div class="emotion-label">Ira / Enojo</div>
+                </div>
+
+                <!-- CARICATURA SOBRECARGA -->
+                <div class="emotion-card" onclick="selectEmotion('sobrecarga', this)">
+                    <svg class="cartoon-avatar" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="#A29BFE"/>
+                        <!-- Ojos X X -->
+                        <path d="M 28 35 L 40 47 M 40 35 L 28 47" stroke="#2D3436" stroke-width="4"/>
+                        <path d="M 60 35 L 72 47 M 72 35 L 60 47" stroke="#2D3436" stroke-width="4"/>
+                        <!-- Boca Bloqueada -->
+                        <rect x="35" y="62" width="30" height="8" rx="4" fill="#2D3436"/>
+                    </svg>
+                    <div class="emotion-label">Sobrecarga / Impulsos</div>
+                </div>
+
+                <!-- CARICATURA TRISTEZA -->
+                <div class="emotion-card" onclick="selectEmotion('tristeza', this)">
+                    <svg class="cartoon-avatar" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="#74B9FF"/>
+                        <!-- Ojos Tristes -->
+                        <path d="M 30 42 Q 35 38 40 42" stroke="#2D3436" stroke-width="4" fill="none"/>
+                        <path d="M 60 42 Q 65 38 70 42" stroke="#2D3436" stroke-width="4" fill="none"/>
+                        <!-- Lágrima -->
+                        <circle cx="38" cy="52" r="4" fill="#0984E3"/>
+                        <!-- Boca Triste -->
+                        <path d="M 35 68 Q 50 58 65 68" stroke="#2D3436" stroke-width="4" fill="none"/>
+                    </svg>
+                    <div class="emotion-label">Tristeza / Bajeza</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PASO 2: TÉCNICA SUGERIDA -->
+        <div class="card">
+            <h2>2. Técnica de Regulación Interactiva</h2>
+            <div id="no-selection-msg" style="text-align: center; color: #777; padding: 20px;">
+                👈 Selecciona un personaje de caricatura arriba para activar tu técnica de regulación.
+            </div>
+
+            <!-- TÉCNICA ANSIEDAD: 5 SENTIDOS -->
+            <div id="tech-ansiedad" class="technique-box">
+                <div class="tech-header">
+                    <!-- Ilustración interactiva (Haz clic) -->
+                    <svg class="interactive-illustration" viewBox="0 0 100 100" onclick="animateSvg(this)">
+                        <circle cx="50" cy="50" r="45" fill="#55EFC4"/>
+                        <circle cx="50" cy="50" r="25" fill="#FFF"/>
+                        <circle cx="50" cy="50" r="10" fill="#2D3436"/>
+                    </svg>
+                    <div>
+                        <h3 style="margin:0; color:var(--primary);">Técnica de Arraigo 5-4-3-2-1</h3>
+                        <small>*(¡Toca el ojo animado para enfocar tu atención!)*</small>
+                    </div>
+                </div>
+                <p>Haz contacto con la realidad a través de tus sentidos:</p>
+                <ol class="steps-list">
+                    <li>👀 <strong>5 cosas que puedas VER:</strong> Nombra en voz alta 5 objetos a tu alrededor.</li>
+                    <li>✋ <strong>4 cosas que puedas TOCAR:</strong> Siente la textura de tu ropa, la mesa o tus manos.</li>
+                    <li>👂 <strong>3 cosas que puedas ESCUCHAR:</strong> Presta atención a los sonidos lejanos.</li>
+                    <li>👃 <strong>2 cosas que puedas OLER:</strong> Identifica algún aroma cercano.</li>
+                    <li>👅 <strong>1 cosa que puedas SABOREAR:</strong> Siente el sabor actual de tu boca.</li>
+                </ol>
+            </div>
+
+            <!-- TÉCNICA IRA: STOP -->
+            <div id="tech-ira" class="technique-box">
+                <div class="tech-header">
+                    <svg class="interactive-illustration" viewBox="0 0 100 100" onclick="animateSvg(this)">
+                        <polygon points="30,10 70,10 90,30 90,70 70,90 30,90 10,70 10,30" fill="#FF7675"/>
+                        <text x="50" y="60" font-size="22" fill="white" font-weight="bold" text-anchor="middle">STOP</text>
+                    </svg>
+                    <div>
+                        <h3 style="margin:0; color:var(--primary);">Técnica S.T.O.P.</h3>
+                        <small>*(Haz clic en el cartel para detener el impulso)*</small>
+                    </div>
+                </div>
+                <p>Aplica estos 4 pasos antes de reaccionar:</p>
+                <ul class="steps-list">
+                    <li><strong>S (Pausa):</strong> Detente inmediatamente. No hables ni actúes por 10 segundos.</li>
+                    <li><strong>T (Toma aire):</strong> Inhala profundo y exhala soltando la tensión muscular.</li>
+                    <li><strong>O (Observa):</strong> Revisa tus pensamientos. ¿Qué me enojó realmente? ¿Estoy exagerando?</li>
+                    <li><strong>P (Procede con sentido):</strong> Actúa de forma efectiva sin dañarte a ti ni a los demás.</li>
+                </ul>
+            </div>
+
+            <!-- TÉCNICA SOBRECARGA: RESPIRACIÓN 4-7-8 Y PROS/CONTRAS -->
+            <div id="tech-sobrecarga" class="technique-box">
+                <div class="tech-header">
+                    <svg class="interactive-illustration" viewBox="0 0 100 100" onclick="animateSvg(this)">
+                        <circle cx="50" cy="50" r="40" fill="#A29BFE"/>
+                        <path d="M 30 50 Q 50 20 70 50 Q 50 80 30 50 Z" fill="#FFF"/>
+                    </svg>
+                    <div>
+                        <h3 style="margin:0; color:var(--primary);">Respiración 4-7-8 y Balanza</h3>
+                        <small>*(Pulsa para simular una inhalación)*</small>
+                    </div>
+                </div>
+                <p>Nivel Básico de Regulación:</p>
+                <ol class="steps-list">
+                    <li><strong>Respiración:</strong> Inhala por la nariz en <strong>4s</strong>, sostén el aire <strong>7s</strong> y exhala por la boca suavemente en <strong>8s</strong>. (Hazlo 3 veces).</li>
+                    <li><strong>Balanza Pros y Contras:</strong> Antes de tomar una decisión impulsiva, pregúntate:
+                        <ul>
+                            <li>¿Qué gano a corto plazo respondiendo al impulso?</li>
+                            <li>¿Qué consecuencias negativas tendré a largo plazo?</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <!-- TÉCNICA TRISTEZA: VISUALIZACIÓN GUIADA -->
+            <div id="tech-tristeza" class="technique-box">
+                <div class="tech-header">
+                    <svg class="interactive-illustration" viewBox="0 0 100 100" onclick="animateSvg(this)">
+                        <circle cx="50" cy="50" r="45" fill="#FFEAA7"/>
+                        <path d="M 20 60 Q 50 30 80 60" stroke="#FDCB6E" stroke-width="8" fill="none"/>
+                        <circle cx="50" cy="35" r="8" fill="#FF7675"/>
+                    </svg>
+                    <div>
+                        <h3 style="margin:0; color:var(--primary);">Visualización: El Lugar Seguro</h3>
+                        <small>*(Pulsa el sol caricatura para proyectar paz)*</small>
+                    </div>
+                </div>
+                <p>Cierra los ojos y realiza este ejercicio mental:</p>
+                <ol class="steps-list">
+                    <li>Imagina un lugar relajante donde nada malo pueda pasar (ej: la playa, un bosque o un cuarto cálido).</li>
+                    <li>Detalla ese espacio: ¿Cómo se siente la temperatura? ¿Qué sonidos agradables hay?</li>
+                    <li>Quédate en ese espacio durante 2 minutos recordando que es tu refugio interno.</li>
+                </ol>
+            </div>
+
+        </div>
+
+        <!-- PASO 3: REGISTRO SIMPLE DE AUTOCUIDADO -->
+        <div class="card">
+            <h2>3. Registro Simple de Calma</h2>
+            <form id="logForm">
+                <div class="form-group">
+                    <label for="regEmotion">Emoción inicial:</label>
+                    <select id="regEmotion" required>
+                        <option value="">Selecciona...</option>
+                        <option value="Ansiedad / Pánico">Ansiedad / Pánico</option>
+                        <option value="Ira / Impulsividad">Ira / Impulsividad</option>
+                        <option value="Sobrecarga / Desbordamiento">Sobrecarga / Desbordamiento</option>
+                        <option value="Tristeza / Decaimiento">Tristeza / Decaimiento</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="regTech">Técnica practicada:</label>
+                    <select id="regTech" required>
+                        <option value="">Selecciona...</option>
+                        <option value="Grounding (5 Sentidos)">Grounding (5 Sentidos)</option>
+                        <option value="Técnica STOP">Técnica STOP</option>
+                        <option value="Respiración 4-7-8">Respiración 4-7-8</option>
+                        <option value="Visualización Guiada">Visualización Guiada</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="regState">¿Cómo te sientes ahora?</label>
+                    <select id="regState" required>
+                        <option value="Mucho mejor 🌟">Mucho mejor 🌟</option>
+                        <option value="Algo más tranquilo/a 😌">Algo más tranquilo/a 😌</option>
+                        <option value="Sin cambios / Igual 😐">Sin cambios / Igual 😐</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-save">Guardar Registro en Mi Dispositivo</button>
+            </form>
+
+            <h3 style="margin-top: 25px; color: var(--primary);">Historial Reciente</h3>
+            <ul id="historyList" class="history-list"></ul>
+        </div>
+
+    </div>
+
+    <script>
+        // Función para cambiar de emoción y mostrar la técnica
+        function selectEmotion(type, element) {
+            // Activar botón seleccionado
+            document.querySelectorAll('.emotion-card').forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+
+            // Ocultar mensaje inicial
+            document.getElementById('no-selection-msg').style.display = 'none';
+
+            // Mostrar el bloque de técnica adecuado
+            document.querySelectorAll('.technique-box').forEach(box => box.classList.remove('active'));
+            const selectedBox = document.getElementById('tech-' + type);
+            if(selectedBox) {
+                selectedBox.classList.add('active');
+            }
+        }
+
+        // Animación sencilla e interactiva al hacer clic en las ilustraciones
+        function animateSvg(svgElement) {
+            svgElement.style.transform = 'scale(1.2) rotate(10deg)';
+            setTimeout(() => {
+                svgElement.style.transform = 'scale(1) rotate(0deg)';
+            }, 300);
+        }
+
+        // Manejo del Registro con LocalStorage
+        const logForm = document.getElementById('logForm');
+        const historyList = document.getElementById('historyList');
+
+        document.addEventListener('DOMContentLoaded', loadLogs);
+
+        logForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const emotion = document.getElementById('regEmotion').value;
+            const technique = document.getElementById('regTech').value;
+            const state = document.getElementById('regState').value;
+            const date = new Date().toLocaleDateString() + ' (' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ')';
+
+            const logEntry = { date, emotion, technique, state };
+
+            let logs = JSON.parse(localStorage.getItem('calmaMente_logs')) || [];
+            logs.unshift(logEntry); // Agregar al inicio
+            localStorage.setItem('calmaMente_logs', JSON.stringify(logs));
+
+            logForm.reset();
+            loadLogs();
+        });
+
+        function loadLogs() {
+            historyList.innerHTML = '';
+            let logs = JSON.parse(localStorage.getItem('calmaMente_logs')) || [];
+
+            if(logs.length === 0) {
+                historyList.innerHTML = '<li style="color:#888; font-style:italic;">No tienes registros guardados.</li>';
+                return;
+            }
+
+            // Mostrar únicamente los últimos 5 registros
+            logs.slice(0, 5).forEach(log => {
+                const li = document.createElement('li');
+                li.className = 'history-item';
+                li.innerHTML = `
+                    <strong>📅 ${log.date}</strong><br>
+                    <span>Emoción: <em>${log.emotion}</em> | Técnica: <em>${log.technique}</em></span><br>
+                    <span>Estado posterior: <strong>${log.state}</strong></span>
+                `;
+                historyList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
